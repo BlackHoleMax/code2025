@@ -51,7 +51,7 @@ const data = reactive({
         ],
         password: [
             { required: true, message: '请输入密码', trigger: 'blur' },
-            { pattern: /^\S*(?=\S{5,15})(?=\S*\d)(?=\S*[A-Z])(?=\S*[a-z])(?=\S*[!@#$%^&*? ])\S*$/, message: '密码必须是5-15位大写字母小写字母数字和特殊字符' },
+            { pattern: /^\S*(?=\S{5,15})(?=\S*\d)(?=\S*[A-Z])(?=\S*[a-z])(?=\S*[!@#$%^&*? ])\S*$/, message: '密码必须是5-15位大写字母小写字母数字和特殊字符' }, // Admin1@123
         ],
         confirmPassword: [
             { required: true, message: '请再次确认密码', trigger: 'blur' },

@@ -25,17 +25,35 @@ const router = createRouter({
           path: "user",
           meta: { name: "普通用户信息" },
           component: () => import("../views/User.vue"),
-        }
+        },
+        {
+          path: "person",
+          meta: { name: "个人信息" },
+          component: () => import("../views/Person.vue"),
+        },
+        {
+          path: "updatePassword",
+          meta: { name: "修改密码" },
+          component: () => import("../views/UpdatePassword.vue"),
+        },
+        {
+          path: "notice",
+          meta: { name: "系统公告" },
+          component: () => import("../views/Notice.vue"),
+        },
+        {
+          path: "introduction",
+          meta: { name: "旅游攻略" },
+          component: () => import("../views/Introduction.vue"),
+        },
       ],
     },
     {
       path: "/login",
-      meta: { name: "登录" },
       component: () => import("../views/Login.vue"),
     },
     {
       path: "/register",
-      meta: { name: "注册" },
       component: () => import("../views/Register.vue"),
     },
     {

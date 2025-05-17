@@ -44,7 +44,7 @@ const data = reactive({
         ],
         password: [
             { required: true, message: '请输入密码', trigger: 'blur' },
-            { min: 5, message: '账号最少五位', trigger: 'blur' }
+            { min: 5, message: '密码最少五位', trigger: 'blur' }
         ],
     }
 })

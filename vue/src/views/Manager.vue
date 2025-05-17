@@ -23,7 +23,13 @@
         ">
         <el-dropdown>
           <div style="display: flex; align-items: center">
-            <img src="@/assets/imgs/avatar.jpg" alt="" style="
+            <img v-if="data.user?.avatar" :src="data.user?.avatar" alt="" style="
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                margin-right: 5px;
+              " />
+            <img v-else src="@/assets/imgs/avatar.jpg" alt="" style="
                 width: 40px;
                 height: 40px;
                 border-radius: 50%;
@@ -33,10 +39,10 @@
           </div>
           <template #dropdown>
             <el-dropdown-menu>
-              <el-dropdown-item>
-                <span>个人中心</span>
+              <el-dropdown-item @click="router.push('/manager/person')">
+                <span>个人信息</span>
               </el-dropdown-item>
-              <el-dropdown-item>
+              <el-dropdown-item @click="router.push('/manager/updatePassword')">
                 <span>修改密码</span>
               </el-dropdown-item>
               <el-dropdown-item divided @click="logout">
@@ -53,7 +59,7 @@
     <div class="main-container">
       <!-- 菜单区域开始 -->
       <div class="menu-container">
-        <el-menu router :default-openeds="['1']" :default-active="router.currentRoute.value.path" class="menu">
+        <el-menu router :default-openeds="['1', '2']" :default-active="router.currentRoute.value.path" class="menu">
           <el-menu-item index="/manager/home">
             <el-icon>
               <House />
@@ -63,7 +69,18 @@
           <el-sub-menu index="1">
             <template #title>
               <el-icon>
-                <location />
+                <Monitor />
+              </el-icon>
+              <span>信息管理</span>
+            </template>
+            <el-menu-item index="/manager/notice" v-if="data.user.role === 'ADMIN'">系统公告</el-menu-item>
+            <el-menu-item index="/manager/notice" v-else>公告信息</el-menu-item>
+            <el-menu-item index="/manager/introduction">旅游攻略</el-menu-item>
+          </el-sub-menu>
+          <el-sub-menu index="2" v-if="data.user.role === 'ADMIN'">
+            <template #title>
+              <el-icon>
+                <User />
               </el-icon>
               <span>用户管理</span>
             </template>
@@ -82,7 +99,7 @@
           width: 0;
           min-height: calc(100vh - 60px);
         ">
-        <Router-view />
+        <Router-view @updateUser="updateUser" />
       </div>
       <!-- 数据渲染区域结束 -->
     </div>
@@ -93,20 +110,17 @@
 <script setup>
 import router from '@/router/index.js';
 import { reactive } from 'vue';
-
-const data = reactive({
-  user: JSON.parse(localStorage.getItem('code_user') || "{}")
-})
+//
+const data = reactive({ user: JSON.parse(localStorage.getItem('code_user') || "{}") })
 
 const logout = () => {
   localStorage.removeItem('code_user')
   location.href = '/login'
 }
 
-
-// if (!data.user?.id) {
-//   location.href = '/login'
-// }
+const updateUser = () => {
+  data.user = JSON.parse(localStorage.getItem('code_user') || "{}")
+}
 </script>
 
 <style>
@@ -119,60 +133,42 @@ const logout = () => {
   --hover-text-color: #333;
 }
 
-/* 修改 el-menu--inline 样式 */
 .el-menu--inline {
   background-color: var(--primary-bg-color);
-  /* 设置背景颜色 */
   border-right: 1px solid var(--primary-active-color);
-  /* 添加右边框 */
   color: var(--primary-text-color);
-  /* 设置文字颜色 */
 }
 
 .el-menu--inline .el-menu-item {
   height: 50px;
-  /* 设置菜单项高度 */
   line-height: 50px;
-  /* 垂直居中 */
   padding: 0 20px;
-  /* 添加左右内边距 */
   color: var(--primary-text-color);
-  /* 设置文字颜色 */
 }
 
 .el-menu--inline .el-menu-item:hover {
   background-color: var(--primary-hover-color);
-  /* 鼠标悬停背景颜色 */
   color: var(--hover-text-color);
-  /* 鼠标悬停文字颜色 */
 }
 
 .el-menu--inline .el-menu-item.is-active {
   background-color: var(--primary-active-color);
-  /* 激活状态背景颜色 */
   color: var(--active-text-color);
-  /* 激活状态文字颜色 */
 }
 
 .el-menu--inline .el-sub-menu__title {
   color: var(--primary-text-color);
-  /* 子菜单标题文字颜色 */
   background-color: var(--primary-bg-color);
-  /* 子菜单标题背景颜色 */
 }
 
 .el-menu--inline .el-sub-menu__title:hover {
   background-color: var(--primary-hover-color);
-  /* 子菜单标题悬停背景颜色 */
   color: var(--hover-text-color);
-  /* 子菜单标题悬停文字颜色 */
 }
 
 .el-menu--inline .el-sub-menu__title.is-opened {
   background-color: var(--primary-active-color);
-  /* 子菜单展开时背景颜色 */
   color: var(--active-text-color);
-  /* 子菜单展开时文字颜色 */
 }
 
 .header {
@@ -229,14 +225,11 @@ const logout = () => {
 .el-sub-menu__title {
   color: var(--primary-text-color);
   background-color: var(--primary-bg-color);
-  /* 确保背景颜色一致 */
 }
 
 .el-sub-menu__title.is-opened {
   background-color: var(--primary-active-color);
-  /* 展开时的背景颜色 */
   color: var(--active-text-color);
-  /* 展开时的文字颜色 */
 }
 
 .el-menu-item {
@@ -268,10 +261,8 @@ const logout = () => {
   color: var(--hover-text-color);
 }
 
-/* 修复二级菜单展开时的背景颜色 */
 .el-menu--popup {
   background-color: var(--primary-bg-color) !important;
-  /* 强制覆盖默认样式 */
   color: var(--primary-text-color) !important;
 }
 
