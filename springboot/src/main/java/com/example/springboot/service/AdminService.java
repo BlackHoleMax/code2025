@@ -74,4 +74,16 @@ public class AdminService {
         dbAdmin.setToken(token);
         return dbAdmin;
     }
+
+    public void updatePassword(Account account) {
+        Account currentUser = TokenUtils.getCurrentUser();
+        if (currentUser != null) {
+            if (!account.getPassword().equals(currentUser.getPassword())) {
+                throw new CustomerException("500", "原密码输入错误");
+            }
+            Admin dbAdmin = adminMapper.selectById(currentUser.getId().toString());
+            dbAdmin.setPassword(account.getNewPassword());
+            adminMapper.updateById(dbAdmin);
+        }
+    }
 }

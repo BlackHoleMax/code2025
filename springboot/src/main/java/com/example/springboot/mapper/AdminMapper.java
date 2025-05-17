@@ -3,7 +3,6 @@ package com.example.springboot.mapper;
 import com.example.springboot.entity.Admin;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 

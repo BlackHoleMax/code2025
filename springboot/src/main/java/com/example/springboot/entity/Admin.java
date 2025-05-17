@@ -14,6 +14,7 @@ public class Admin extends Account{
     private String email;
     private String role;
     private String token;
+    private String avatar;
 
     private String ids;
     private String[] idsArr;

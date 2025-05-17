@@ -2,6 +2,7 @@ package com.example.springboot.service;
 
 import cn.hutool.core.util.StrUtil;
 import com.example.springboot.entity.Account;
+import com.example.springboot.entity.Admin;
 import com.example.springboot.entity.User;
 import com.example.springboot.exception.CustomerException;
 import com.example.springboot.mapper.UserMapper;
@@ -76,5 +77,17 @@ public class UserService {
 
     public void register(User user) {
         this.add(user);
+    }
+
+    public void updatePassword(Account account) {
+        Account currentUser = TokenUtils.getCurrentUser();
+        if (currentUser != null) {
+            if (!account.getPassword().equals(currentUser.getPassword())) {
+                throw new CustomerException("500", "原密码输入错误");
+            }
+            User dbUser = userMapper.selectById(currentUser.getId().toString());
+            dbUser.setPassword(account.getNewPassword());
+            userMapper.updateById(dbUser);
+        }
     }
 }

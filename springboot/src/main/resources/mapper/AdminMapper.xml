@@ -20,8 +20,8 @@
     </select>
 
     <insert id="insert">
-        insert into `admin` (id, username, password, name, phone, email)
-        values (#{id}, #{username}, #{password}, #{name}, #{phone}, #{email})
+        insert into `admin` (id, username, password, name, phone, email, avatar)
+        values (#{id}, #{username}, #{password}, #{name}, #{phone}, #{email}, #{avatar})
     </insert>
 
     <update id="updateById" parameterType="com.example.springboot.entity.Admin">
@@ -29,7 +29,8 @@
         set username = #{username},
             name     = #{name},
             phone    = #{phone},
-            email    = #{email}
+            email    = #{email},
+            avatar   = #{avatar}
         WHERE id = #{id}
     </update>
 </mapper>
